@@ -1,0 +1,35 @@
+name: Harvest catalog
+
+on:
+  schedule:
+    # 03:00 UTC every Monday — 08:30 IST, well clear of the midnight
+    # Pacific quota reset.
+    - cron: "0 3 * * 1"
+  workflow_dispatch:      # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  harvest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - run: python harvest.py
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+
+      - name: Commit if changed
+        run: |
+          git config user.name "vatsalya-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "Refresh catalog"
+          git push
