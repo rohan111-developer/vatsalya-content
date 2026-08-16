@@ -5,10 +5,11 @@
 # "channelId". Or paste the URL into a "youtube channel id finder" tool.
 
 defaults:
-  min_views: 5000
-  min_duration_seconds: 120      # drops Shorts and clips
-  max_duration_seconds: 10800    # drops 3h+ sleep loops
-  max_per_channel: 400           # stops one prolific channel dominating
+  min_views: 700000
+  min_views_per_day: 20000
+  min_duration_seconds: 90      # drops Shorts and clips
+  max_duration_seconds: 14400    # drops 3h+ sleep loops
+  max_per_channel: 1000           # stops one prolific channel dominating
 
 categories:
   - id: stories
@@ -20,6 +21,17 @@ categories:
       Garbh Sanskar is a traditional practice. These stories are shared for
       comfort and connection, not as medical guidance.
     channels:
+      - UC-aNK_0GZiJiuBdXVZUipAw   # Garbh Sneha (215 videos)
+      - UCxbb_h2nCGt74QBDemQlcKw   #  GHARBH VANI (178 videos)
+      - UCJFqIQ35dzGhg-8tLHTMsZA   # Bharat - Sanskaron ki Janani (768 videos)
+      - UCTkgkWBn4-_LPxi6Kc4cPPA   # Be Listener (291 videos)
+      - UCdsQsaeI8pQZtgrMmbjGUug   # Nova Spiritual India (1224 videos)
+      - UC8lunbIAM8Y_JEBVol97IxA   # Sanjivan Garbhsanskar  (1286 videos)
+      - UCt8dW53ILPDGSScfbJqjkGg   # Gyan Ujala (334 videos)
+      - UCKC81SI5JTxRBuBWgf8BEfA   # DreamChild Garbhsanskar  (687 videos)
+      - UCqP0U2liCV_xjWhp1nDsW1g   # H2Yoga Aryasudha (329 videos)
+      - UCOleOaWSrIjRISUbI8W-FMA   # Krishna Coming Garbh Sanskar (219 videos)
+      - UC7jrGv8nhSJJRPZvS1lMLyA   # Anmol Sathi (168 videos)
       - UCrQ2-hzImdJ4A3BD0yIYm-A   # Majestic Garbh Sanskar
       - UCFiqLWzPrnq0RmY36HH43WA   # The Indian Garbh Sanskar
     # A video needs at least one of these in its title to qualify.
@@ -42,6 +54,15 @@ categories:
     icon: self_improvement
     accent: sand
     channels:
+      - UCyOp-jf0wiFKDlreqoy5INw   # Bhakti Mantras India (591 videos)
+      - UCgzYCx2PPV1BXLxDU6n7MAw   # Kanha Music Bhakti  (130 videos)
+      - UCaqDu9xbvQv8JGTcnzlsc1Q   # Mahakatha - Meditation Mantras (2474 videos)
+      - UCwhXQRePRbW6ItU0R9yhOSg   # Yogini Srishti (560 videos)
+      - UCjXBFJdazz7oP0vhg1siskw   # Meditation Mantras (363 videos)
+      - UCCrcSez57F3YOt9eXPe4yew   # Powerful Mantras, Shlokas & Pooja (1877 videos)
+      - UCvmeN3abwp3yHdqtKNXbSxg   # Arpita Yoga Tech  (265 videos)
+      - UCsrNmYXacPmaOBGa86u1afg   # Music Soul (127 videos)
+      - UCYtxSm9PABgQWJQadBFwd3A   # Divine Baby Soul (934 videos)
       - UC8-r1K5ssTEMvI0poyZOQuw   # Vedic Garbh Sanskar
       - UCrQ2-hzImdJ4A3BD0yIYm-A   # Majestic Garbh Sanskar
     include_any:

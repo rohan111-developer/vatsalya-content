@@ -35,6 +35,125 @@ ISO_DURATION = re.compile(
 )
 
 
+# ---------------------------------------------------------------------------
+# SAFETY DENY LIST
+#
+# Applied to title AND description, case-insensitively, across every
+# category. A single match rejects the video outright — no scoring, no
+# second chance.
+#
+# This exists because ranking by engagement optimises for popular, and in
+# this niche a lot of what's popular is harmful. These are not edge cases;
+# they are the genres that fill an unfiltered garbh sanskar shelf.
+# ---------------------------------------------------------------------------
+
+DENY = {
+    # ---- ILLEGAL IN INDIA ---------------------------------------------
+    # The PCPNDT Act 1994 prohibits communicating foetal sex. "Predict your
+    # baby's gender" is a huge genre on YouTube India. Distributing it
+    # through an app aimed at Indian pregnant women is not a risk worth
+    # any amount of engagement.
+    "legal": [
+        "boy or girl", "gender predict", "gender reveal", "baby gender",
+        "ladka ya ladki", "ladka hoga", "ladki hogi", "beta hoga",
+        "लड़का या लड़की", "लड़का होगा", "लड़की होगी", "बेटा होगा",
+        "गर्भ में लड़का", "गर्भ में लड़की", "लिंग परीक्षण",
+        "boy symptoms", "girl symptoms", "male baby", "female baby",
+    ],
+
+    # ---- SON PREFERENCE -----------------------------------------------
+    # Mantras and rituals promising a son. Popular, well-ranked, and
+    # something no app for expecting mothers should carry.
+    "son_preference": [
+        "putra prapti", "putr prapti", "पुत्र प्राप्ति", "पुत्र प्राप्ति मंत्र",
+        "son mantra", "mantra for son", "for baby boy", "baby boy mantra",
+        "वंश", "kul deepak",
+    ],
+
+    # ---- COLOURISM ----------------------------------------------------
+    # The "fair baby" genre — foods, mantras and rituals for lighter skin.
+    # Enormously popular. Actively harmful.
+    "colourism": [
+        "gora baccha", "gora bacha", "fair baby", "fair complexion",
+        "गोरा बच्चा", "गोरा होगा", "रंग गोरा", "fairness",
+        "skin colour of baby", "baby colour", "white baby",
+    ],
+
+    # ---- MEDICAL AND OUTCOME CLAIMS ------------------------------------
+    # We removed the medical category precisely to avoid this. Claims about
+    # intelligence, guaranteed outcomes and cures don't get in by the back
+    # door via a "story" or "mantra".
+    "claims": [
+        "guaranteed", "100% result", "100% working", "गारंटी",
+        "increase iq", "iq badhaye", "intelligent baby", "genius baby",
+        "smart baby banaye", "cure", "ilaj", "इलाज", "treatment",
+        "medicine", "दवा", "instant result", "chamatkari", "चमत्कारी",
+        "miracle",
+    ],
+
+    # ---- FEAR AND DISTRESS ---------------------------------------------
+    # She may be watching at 2am, alone, already anxious. Nothing in this
+    # app should raise her heart rate.
+    "fear": [
+        "miscarriage", "गर्भपात", "abortion", "danger", "खतरा",
+        "warning", "चेतावनी", "mistake", "galti", "गलती",
+        "never do", "bhulkar bhi", "भूलकर भी", "risk", "problem",
+        "complication", "death", "मृत्यु", "shocking", "चौंकाने",
+    ],
+
+    # ---- SELLING -------------------------------------------------------
+    # Course pitches, workshop ads, consultation funnels. She came for a
+    # story, not a sales call.
+    "selling": [
+        "course", "workshop", "admission", "fees", "enroll", "enrol",
+        "join now", "call now", "whatsapp", "book now", "consultation",
+        "appointment", "discount", "offer price", "limited time",
+    ],
+
+    # ---- CLICKBAIT AND LOW EFFORT --------------------------------------
+    "clickbait": [
+        "must watch", "viral video", "trending", "shorts", "#shorts",
+        "reaction", "vlog", "prank", "challenge", "unboxing",
+        "part 2 link", "subscribe now",
+    ],
+}
+
+# Flattened once at import rather than per video — this runs against
+# thousands of titles.
+DENY_FLAT = [(term.lower(), group)
+             for group, terms in DENY.items()
+             for term in terms]
+
+
+def deny_reason(title, description):
+    """Returns the deny group that matched, or None."""
+    haystack = f"{title} {description}".lower()
+    for term, group in DENY_FLAT:
+        if term in haystack:
+            return f"deny:{group}"
+    return None
+
+
+def looks_like_clickbait(title):
+    """Structural signals, no keywords needed.
+
+    Shouty titles and emoji walls correlate strongly with the kind of
+    content we're already excluding by keyword — this catches the ones
+    that phrase it differently.
+    """
+    letters = [c for c in title if c.isalpha() and c.isascii()]
+    if len(letters) >= 12:
+        caps = sum(1 for c in letters if c.isupper()) / len(letters)
+        if caps > 0.6:
+            return True
+    if title.count("!") >= 3 or title.count("?") >= 3:
+        return True
+    # Emoji and symbol pile-ups
+    exotic = sum(1 for c in title if ord(c) > 0x2100)
+    if exotic >= 4:
+        return True
+    return False
+
 def die(msg):
     print(f"ERROR: {msg}", file=sys.stderr)
     sys.exit(1)
@@ -124,6 +243,33 @@ def passes(v, cfg, blocked):
     views = int(stats.get("viewCount", 0) or 0)
     if views < cfg["min_views"]:
         return False
+
+    # Safety gates come before preference filters — an excluded video is
+    # excluded regardless of how well it performs.
+    raw_title = snip.get("title") or ""
+    desc = (snip.get("description") or "")[:600]
+
+    reason = deny_reason(raw_title, desc)
+    if reason:
+        return reason
+
+    if looks_like_clickbait(raw_title):
+        return "clickbait shape"
+
+    # Engagement quality. A video with plenty of views but a very low like
+    # rate is usually one people clicked and regretted. 0.5% is well below
+    # normal — typical is 2–5%.
+    likes = v.get("statistics", {}).get("likeCount")
+    if likes is not None and views > 20000:
+        if int(likes) / views < 0.005:
+            return "poor like ratio"
+
+    # Comments disabled on a channel that has them elsewhere is a weak
+    # signal, but zero comments on a high-view video usually means the
+    # uploader turned them off after trouble.
+    comments = v.get("statistics", {}).get("commentCount")
+    if comments is not None and views > 100000 and int(comments) == 0:
+        return "comments disabled at scale"
 
     title = (snip.get("title") or "").lower()
     inc = [k.lower() for k in cfg.get("include_any") or []]
