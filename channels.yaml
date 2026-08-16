@@ -1,0 +1,72 @@
+# The only file you edit by hand. Add a channel here and its whole back
+# catalogue enters the library on the next run.
+#
+# To find a channel ID: open the channel, view page source, search for
+# "channelId". Or paste the URL into a "youtube channel id finder" tool.
+
+defaults:
+  min_views: 5000
+  min_duration_seconds: 120      # drops Shorts and clips
+  max_duration_seconds: 10800    # drops 3h+ sleep loops
+  max_per_channel: 400           # stops one prolific channel dominating
+
+categories:
+  - id: stories
+    title: Garbh Sanskar Stories
+    blurb: Tales from the Ramayana, Mahabharata and Panchatantra
+    icon: auto_stories
+    accent: blush
+    note: >-
+      Garbh Sanskar is a traditional practice. These stories are shared for
+      comfort and connection, not as medical guidance.
+    channels:
+      - UCrQ2-hzImdJ4A3BD0yIYm-A   # Majestic Garbh Sanskar
+      - UCFiqLWzPrnq0RmY36HH43WA   # The Indian Garbh Sanskar
+    # A video needs at least one of these in its title to qualify.
+    # Leave the list empty to accept everything from the channel.
+    include_any:
+      - katha
+      - kahani
+      - story
+      - stories
+      - कथा
+      - कहानी
+    exclude_any:
+      - shorts
+      - trailer
+      - promo
+
+  - id: mantras
+    title: Mantras & Devotional
+    blurb: Gentle chanting for quiet moments
+    icon: self_improvement
+    accent: sand
+    channels:
+      - UC8-r1K5ssTEMvI0poyZOQuw   # Vedic Garbh Sanskar
+      - UCrQ2-hzImdJ4A3BD0yIYm-A   # Majestic Garbh Sanskar
+    include_any:
+      - mantra
+      - chant
+      - stotra
+      - shloka
+      - मंत्र
+      - श्लोक
+    exclude_any:
+      - shorts
+      - interview
+
+  - id: meditation
+    title: Meditation & Calm
+    blurb: Guided rest, womb meditation and sleep sounds
+    icon: spa
+    accent: moss
+    channels:
+      - UC8-r1K5ssTEMvI0poyZOQuw   # Vedic Garbh Sanskar
+    include_any:
+      - meditation
+      - relax
+      - sleep
+      - calm
+      - ध्यान
+    exclude_any:
+      - shorts

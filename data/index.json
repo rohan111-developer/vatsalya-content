@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "updatedAt": "2026-08-16T06:48:37.677815+00:00",
+  "categories": [
+    {
+      "id": "stories",
+      "title": "Garbh Sanskar Stories",
+      "blurb": "Tales from the Ramayana, Mahabharata and Panchatantra",
+      "icon": "auto_stories",
+      "accent": "blush",
+      "note": "Garbh Sanskar is a traditional practice. These stories are shared for comfort and connection, not as medical guidance.",
+      "count": 2,
+      "file": "stories.json",
+      "checksum": "ddaa9878616c932a"
+    },
+    {
+      "id": "mantras",
+      "title": "Mantras & Devotional",
+      "blurb": "Gentle chanting for quiet moments",
+      "icon": "self_improvement",
+      "accent": "sand",
+      "note": null,
+      "count": 15,
+      "file": "mantras.json",
+      "checksum": "be5efedbdb8a7ed9"
+    },
+    {
+      "id": "meditation",
+      "title": "Meditation & Calm",
+      "blurb": "Guided rest, womb meditation and sleep sounds",
+      "icon": "spa",
+      "accent": "moss",
+      "note": null,
+      "count": 2,
+      "file": "meditation.json",
+      "checksum": "c9d8712f6a16c302"
+    }
+  ]
+}
