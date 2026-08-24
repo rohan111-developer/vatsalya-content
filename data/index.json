@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-08-17T05:12:38.083407+00:00",
+  "updatedAt": "2026-08-24T05:27:16.249407+00:00",
   "categories": [
     {
       "id": "stories",
@@ -9,9 +9,9 @@
       "icon": "auto_stories",
       "accent": "blush",
       "note": "Garbh Sanskar is a traditional practice. These stories are shared for comfort and connection, not as medical guidance.",
-      "count": 131,
+      "count": 132,
       "file": "stories.json",
-      "checksum": "850e67614c2af6aa"
+      "checksum": "b8f4a0ded44d3a2f"
     },
     {
       "id": "mantras",
@@ -22,7 +22,7 @@
       "note": null,
       "count": 107,
       "file": "mantras.json",
-      "checksum": "732ecf8b4667be1f"
+      "checksum": "f50f1e81a9af52fa"
     },
     {
       "id": "meditation",
@@ -33,7 +33,7 @@
       "note": null,
       "count": 2,
       "file": "meditation.json",
-      "checksum": "1775d9c851f482c1"
+      "checksum": "fd665dd4de292b95"
     }
   ]
 }
